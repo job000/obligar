@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+
+
+</head>
+<body>
+
+<canvas id="pageCanvas" width="680" height="720" ></canvas>
+
+<p>{{msg.payload}}</p>
+
+    <script>
+        var context = document.getElementById('pageCanvas').getContext('2d');
+        var angle = 0;
+
+        function convertToRadians(degree) {
+            return degree*(Math.PI/240);
+        }
+        
+        //funksjon for å rotere
+        function incrementAngle() {
+            
+            angle++;
+            if(angle > 360) {
+                angle = 0;
+            }
+        }
+
+         function testit(msg,scope) {
+        count = count+1;
+        console.log("In testit " + msg.payload + "  count = " + count);
+        scope.send({payload: "from testit " + msg.payload + "  count = " + count});
+    }
+
+        //Funksjon som viser grafisk av de ytre boksen og sirkelen.
+        function draw_outerlayer(){
+            context.save();                
+            context.lineWidth = 3;  
+            context.translate(350,350); //Plasering av objekt på vindu
+            context.beginPath();
+            context.moveTo(-300,-250);
+
+            context.rect(-300, -250, 600, 500);
+
+            context.moveTo(250,0);
+            context.arc(0,0,250,0,2*Math.PI);
+
+            
+            context.strokeStyle="black";
+            context.stroke();          
+            context.restore();
+
+        }
+
+        function draw() {  
+            
+            
+            context.clearRect(0,0,700,700);
+            
+            incrementAngle();
+            draw_outerlayer();
+            context.save();                
+            context.lineWidth = 3;  
+            context.translate(350,350); //Plasering av objekt på vindu
+            context.rotate(convertToRadians(angle));
+            
+
+            //For å starta å tegne må beginPath funksjon brukes.
+            context.beginPath();
+            
+            /**  Koden nedenfor er for å tegne den sirkelen i midten   **/
+            context.arc(0,0,20,0,2*Math.PI);
+            context.moveTo(10,0);
+            context.arc(0,0,10,0,2*Math.PI);
+            
+            
+
+            /***   Følgende er propell oppover   ***/
+
+            //Høyre siden av propellen.
+            context.moveTo(5,-19); //Laga et startpunkt
+            context.lineTo(5,-40); //(x,y)
+            context.lineTo(20,-60);
+            context.lineTo(15,-220);
+
+            context.moveTo(-15,-220);
+            context.bezierCurveTo(-15,-240, 15, -240, 15,-220);
+
+            //Venstre siden av propellen.
+            context.moveTo(-5,-19); //Laga et startpunkt
+            context.lineTo(-5,-40);
+            context.lineTo(-20,-60);
+            context.lineTo(-15,-220);
+
+            /** Propell nedover **/
+
+            //Høyre siden av propellen.
+            context.moveTo(-5,19); //Laga et startpunkt
+            context.lineTo(-5,40); //(x,y)
+            context.lineTo(-20,60);
+            context.lineTo(-15,220);
+
+            context.moveTo(15,220);
+            context.bezierCurveTo(15,240, -15, 240, -15,220);
+
+            //Venstre siden av propellen.
+            context.moveTo(5,19); //Laga et startpunkt
+            context.lineTo(5,40);
+            context.lineTo(20,60);
+            context.lineTo(15,220);
+
+
+
+            //Hjelpe linjer:
+            context.moveTo(-20,0); // x-aksen VHP
+            context.lineTo(-230,0);
+
+            context.moveTo(0,-20); // y-aksen negativ akse
+            context.lineTo(0,-230);
+
+            context.moveTo(20,0); // x-aksen HHP
+            context.lineTo(230,0);
+
+            context.moveTo(0,20); // y-aksen positiv akse
+            context.lineTo(0,230);
+
+            
+
+            //hjelpe linje ned mot VHP:
+            context.moveTo(-15,15);
+            context.lineTo(-165,165);
+
+            //hjelpe linje opp mot HHP:
+            context.moveTo(15,-15);
+            context.lineTo(165,-165);
+
+            //Hjelpe linje ned mot HHP:
+            context.moveTo(15,15);
+            context.lineTo(165,165);
+
+            //Hjelpe linje opp mot VHP:
+            context.moveTo(-15,-15);
+            context.lineTo(-165,-165);
+
+
+
+            /***    Propeller ned mot VHP    ***/
+
+            context.moveTo(-18,10); //Linje på venstre siden.
+            context.lineTo(-35,27);
+            context.lineTo(-55,25);
+            context.lineTo(-170,150);
+
+            context.moveTo(-10,18); // linje på høyre siden.
+            context.lineTo(-27,35);
+            context.lineTo(-25,55);
+            context.lineTo(-150,170);
+
+            context.moveTo(-170,150);
+            context.bezierCurveTo(-185,165,-160,180, -150,170);
+
+
+
+            /***    Propellen opp mot HHP    **/
+            context.moveTo(18,-10); //Linje på venstre siden.
+            context.lineTo(35,-27);
+            context.lineTo(55,-25);
+            context.lineTo(170,-150);
+
+            context.moveTo(10,-18); // linje på høyre siden.
+            context.lineTo(27,-35);
+            context.lineTo(25,-55);
+            context.lineTo(150,-170);
+
+
+            context.moveTo(170,-150);
+            context.bezierCurveTo(185,-165,160,-180, 150,-170);
+
+            /***  Propeller ned mot HHP  ***/
+
+           context.moveTo(10,18); //Linje på venstre siden ac propellen
+           context.lineTo(27,35);
+           context.lineTo(25,55);
+           context.lineTo(150,170);
+
+           context.moveTo(18,10);
+           context.lineTo(35,27);
+           context.lineTo(55,25);
+           context.lineTo(170,150);
+
+           context.moveTo(150,170);
+            context.bezierCurveTo(165,185,180,160, 170,150);
+
+
+            /***  Propeller ned mot HHP  ***/
+
+           context.moveTo(-10,-18); //Linje på venstre siden ac propellen
+           context.lineTo(-27,-35);
+           context.lineTo(-25,-55);
+           context.lineTo(-150,-170);
+
+           context.moveTo(-18,-10);
+           context.lineTo(-35,-27);
+           context.lineTo(-55,-25);
+           context.lineTo(-170,-150);
+
+           context.moveTo(-150,-170);
+            context.bezierCurveTo(-165,-185,-180,-160,-170,-150);
+
+            
+            
+            /***   Følgende er propell på VHP langs x-aksen   ***/
+
+            //Høyre siden av propellen.
+            context.moveTo(-19,-5); //Laga et startpunkt
+            context.lineTo(-40,-5); //(x,y)
+            context.lineTo(-60,-20);
+            context.lineTo(-220,-15);
+
+            context.moveTo(-220,-15);
+            context.bezierCurveTo(-240,-15, -240, 15,-220,15);
+
+            //Venstre siden av propellen.
+            context.moveTo(-19,5); //Laga et startpunkt
+            context.lineTo(-40,5);
+            context.lineTo(-60,20);
+            context.lineTo(-220,15);
+            
+
+            /**Følgende er propeller på HHP langs x-aksen**/
+
+            //Høyre siden av propellen.
+            context.moveTo(19,5); //Laga et startpunkt
+            context.lineTo(40,5); //(x,y)
+            context.lineTo(60,20);
+            context.lineTo(220,15);
+
+            context.moveTo(220,15);
+            context.bezierCurveTo(240,15, 240, -15,220,-15);
+
+            //Venstre siden av propellen.
+            context.moveTo(19,-5); //Laga et startpunkt
+            context.lineTo(40,-5);
+            context.lineTo(60,-20);
+            context.lineTo(220,-15);
+
+            context.fillStyle ="green";
+            context.fill();
+            context.strokeStyle ="blue";
+            context.stroke();          
+            context.restore();
+        }
+
+        setInterval(draw, 0);
+
+
+    </script>
+            
+</body>
+</html>
